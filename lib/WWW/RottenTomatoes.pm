@@ -237,7 +237,7 @@ $api->movies_search( query => 'The Goonies' );
 This module is intended to provide an interface between Perl and the Rotten
 Tomatoes JSON API. The Rotten Tomatoes API is a RESTful web service. In order
 to use this library you must provide an api key which requires registration.
-For more information please see Http://dev.rottentomatoes.com    
+For more information please see http://developer.rottentomatoes.com    
 
 =head1 CONSTRUCTOR
 
@@ -409,9 +409,7 @@ N/A at the current point in time
 
 =head1 CONFIGURATION AND ENVIRONMENT
 
-This package has only been tested in a 64bit Unix (OSX) environment however
-it does not make usage of any code or modules considered OS specific and no
-special configuration or configuration files are needed. 
+No special configuration and or configuration files are needed. 
 
 =head1 INCOMPATIBILITIES
 
