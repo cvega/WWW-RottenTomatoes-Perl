@@ -5,7 +5,7 @@ use Carp qw{croak};
 	
 use base qw{REST::Client};
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 sub new {
     my ( $class, %args ) = @_;
@@ -34,7 +34,7 @@ sub movies_search {
     my ( $self, %args ) = @_;
 
     if ( !$args{query} ) {
-        croak 'movie_search method requires a "query" parameter'
+        croak 'movie_search method requires a "query" parameter';
     }
 
     if ( $args{query} ) { 
@@ -131,7 +131,7 @@ sub movie_info {
     my ( $self, %args ) = @_;
 
     if ( !$args{movie_id} ) {
-        croak 'movie_info method requires a "movie_id" parameter'
+        croak 'movie_info method requires a "movie_id" parameter';
     }
 
     $self->GET( "/movies/$args{movie_id}" . $self->{params} );
@@ -219,189 +219,235 @@ WWW::RottenTomatoes - A Perl interface to the Rotten Tomatoes API
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =head1 SYNPOSIS
 
-use WWW::RottenTomatoes;
+    use WWW::RottenTomatoes;
 
-my $api = WWW::RottenTomatoes->new(
-    api_key      => 'your_api_key',
-    pretty_print => 'true'
-);
+    my $rt = WWW::RottenTomatoes->new(
+        api_key      => 'your_api_key',
+        pretty_print => 'true'
+    );
 
-$api->movies_search( query => 'The Goonies' );
+    $rt->movies_search( query => 'The Goonies' );
 
 =head1 DESCRIPTION
 
 This module is intended to provide an interface between Perl and the Rotten
 Tomatoes JSON API. The Rotten Tomatoes API is a RESTful web service. In order
 to use this library you must provide an api key which requires registration.
-For more information please see http://developer.rottentomatoes.com    
+For more information please see Http://dev.rottentomatoes.com    
 
 =head1 CONSTRUCTOR
 
-=over
+=head2 new()
 
-=item C<< new() >>
+Creates and returns a new WWW::RottenTomatoes object
 
-Creates and returns a new object
+    my $api= WWW::RottenTomatoes->new()
 
-my $api= WWW::RottenTomatoes->new()
+=over 4
 
 =item * C<< api_key => [your_api_key] >>
 
 The api_key parameter is required. You must provide a valid key.
 
-=item * C<< pretty_print => [true|false} >>
+=item * C<< pretty_print => [true] >>
 
 This parameter allows you to enable the pretty print function of the API. By
 default this parameter is set to false meaning you do not have to specify the
-parameter unless you intent to set it to true. This parameter is optional.
+parameter unless you intend to set it to true.
 
 =back
 
 =head1 SUBROUTINES/METHODS
 
-=over
-
-=item C<< $obj->movies_search(\%args) >>
+=head2 $obj->movies_search(...)
 
 The movies search endpoint for plain text queries
 
-* C<< query >> (plain text search query)
+    $api->movies_search( 
+	query      => $search_query,
+        page       => $page,
+        page_limit => $page_limit 
+    );
 
-string, required: true
+* B< query > S< string, required: true >
 
-* C<< page_limit >> (The amount of movie search results to show per page)
+plain text search query
 
-integer, required: false, default: 30
+* B< page_limit > S< integer, required: false, default: 30 >
 
-* C<< page >> (The selected page of movie search results)
+the amount of movie search results to show per page
 
-integer, required: false, default: 1
+* B< page > S< integer, required: false, default: 1 >
 
-=item C<< $obj->lists_directory >>
+the selected page of movie search results
+
+=head2 $obj->lists_directory
 
 Displays the top level lists available in the API
 
 * no parameters required
 
-=item C<< $obj->movie_lists_directory >>
+=head2 $obj->movie_lists_directory
 
 Shows the movie lists we have available
 
 * no parameters required
 
-=item C<< $obj->dvd_lists_directory >>
+=head2 $obj->dvd_lists_directory
 
 Shows the DVD lists we have available
 
 * no parameters required
 
-=item C<< $obj->opening_movies(\%args) >>
+=head2 $obj->opening_movies(...)
 
 Retrieves current opening movies
 
-* limit (limits number of movies returned)
+    $obj->opening_movies(
+        limit   => 5,
+        country => 'us'
+    );
 
-integer, required: false, default: 16
+* B< limit > S< integer, required: false, default: 16 >
 
-* country (provides localized data for selected country (ISO 3166-1 alpha-2)
+limits number of movies returned
 
-string, required: false, default: "us"
+* B< country > S< string, required: false, default: "us" >
 
-=item C<< $obj->upcoming_movies(\%args) >>
+provides localized data for selected country (ISO 3166-1 alpha-2)
+
+=head2 $obj->upcoming_movies(...)
 
 Retrieves upcoming movies
 
-* page_limit (The amount of new release dvds to show per page)
+    $obj->upcoming_movies(
+        page_limit => 5,
+        page       => 2,
+        country    => 'uk'
+    ); 
 
-integer, required: false, default: 16
+* B< page_limit > S< integer, required: false, default: 16 >
 
-* page (The selected page of upcoming movies)
+the amount of upcoming movies to show per page
 
-integer, required: false, default: 1
+* B< page > S< integer, required: false, default: 1 >
 
-* country (provides localized data for selected country (ISO 3166-1 alpha-2)
+the selected page of upcoming movies
 
-string, required: false, default: "us"
+* B< country > S< string, required: false, default: "us" >
 
-=item C<< $obj->new_release_dvds(\%args) >>
+provides localized data for selected country (ISO 3166-1 alpha-2)
+
+=head2 $obj->new_release_dvds(...)
 
 Retrieves new release dvds
 
-* page_limit (The amount of new release dvds to show per page)
+    $obj->new_release_dvds(
+        page_limit => 10,
+        page       => 3,
+        country    => 'ca'
+    );
 
-integer, required: false, default: 16
+* B< page_limit > S< integer, required: false, default: 16 >
 
-* page (The selected page of upcoming movies)
+The amount of new release dvds to show per page
 
-integer, required: false, default: 1
+* B< page > S< integer, required: false, default: 1 >
 
-* country (provides localized data for selected country (ISO 3166-1 alpha-2)
+The selected page of new release dvds
 
-string, required: false, default: "us"
+* B< country > S< string, required: false, default: "us" >
 
-=item C<< $obj->movie_info(\%args) >>
+provides localized data for selected country (ISO 3166-1 alpha-2)
 
-Detailed information on a specific movie specified by Id. You can use the movies
-search endpoint or peruse the lists of movies/dvds to get the urls to movies.
+=head2 $obj->movie_info(...)
 
-* no parameters required
+Detailed information on a specific movie specified by Id. You can use the
+movies search endpoint or peruse the lists of movies/dvds to get the urls to
+movies.
 
-=item C<< $obj->movie_cast >>
+     $obj->movie_info( movie_id => 770672122 ); 
+
+* B< movie_id > S< integer, required: false, default: 16 >
+
+=head2 $obj->movie_cast(...)
 
 Pulls the complete movie cast for a movie
 
-* no parameters required
+     $obj->movie_cast( movie_id => 770672122 );
 
-=item C<< $obj->movie_reviews(\%args) >>
+* B< movie_id > S< integer, required: false, default: 16 >
+
+=head2 $obj->movie_reviews(...)
 
 Retrieves the reviews for a movie. Results are paginated if they go past the
 specified page limit
 
-* review_type (3 different review types are possible: "all", "top_critic" and 
-"dvd". "top_critic" shows all the Rotten "top_critic" shows all the Rotten.
-"dvd" pulls the reviews given on the DVD of the movie. "all" as the name implies
+    $obj->movie_reviews(
+        movie_id    => 770672122,
+        review_type => 'dvd',
+        page_limit  => 1,
+        page        => 5,
+        country     => 'us'
+    );
+
+* B< review_type > S< string, required: false, default: top_critic >
+
+3 different review types are possible: "all", "top_critic" and  "dvd".
+"top_critic" shows all the Rotten "top_critic" shows all the Rotten. "dvd"
+pulls the reviews given on the DVD of the movie. "all" as the name implies
 retrieves all reviews
 
-string, required: false, default: top_critic
+* B< page_limit > S< integer, required: false, default: 16 >
 
-* page_limit (The amount of new release dvds to show per page)
+The amount of movie reviews to show per page
 
-integer, required: false, default: 16
+* B< page > S< integer, required: false, default: 1 >
 
-* page (The selected page of upcoming movies)
+The selected page of movie reviews
 
-integer, required: false, default: 1
+* B< country > S< string, required: false, default: "us" > 
 
-* country (provides localized data for selected country (ISO 3166-1 alpha-2)
+provides localized data for selected country (ISO 3166-1 alpha-2)
 
-string, required: false, default: "us"
-
-=item C<< $obj->in_theatre_movies(\%args) >>
+=head2 $obj->in_theatre_movies(...)
 
 Retrieves movies currently in theaters
 
-* page_limit (The amount of new release dvds to show per page)
+    $obj->in_theatre_movies(
+        page_limit  => 3,
+        page        => 2,
+        country     => 'mx'
+    );
 
-integer, required: false, default: 16
+* B< page_limit > S< integer, required: false, default: 16 >
 
-* page (The selected page of upcoming movies)
+The amount of in theatre movies to show per page
 
-integer, required: false, default: 1
+* B< page > S< integer, required: false, default: 1 >
 
-* country (provides localized data for selected country (ISO 3166-1 alpha-2)
+The selected page of in theatre movies
 
-string, required: false, default: "us"
+* B< country > S< string, required: false, default: "us" >
 
-=item C<< $obj->callback(\%args) >>
+provides localized data for selected country (ISO 3166-1 alpha-2)
 
-* callback_fn (The API supports JSONP calls. Simply append a callback parameter
-with the name of your callback method at the end of the request. 
+=head2 $obj->callback(...)
 
-=back
+JSONP Support
+
+    $obj->callback(
+        callback_fn => method();
+    );
+
+* B< callback_fn >
+
+The API supports JSONP calls. Simply append a callback parameter with the name
+of your callback method at the end of the request. 
 
 =head1 DIAGNOSTICS 
 
@@ -409,7 +455,9 @@ N/A at the current point in time
 
 =head1 CONFIGURATION AND ENVIRONMENT
 
-No special configuration and or configuration files are needed. 
+This package has only been tested in a 64bit Unix (OSX) environment however
+it does not make usage of any code or modules considered OS specific and no
+special configuration and or configuration files are needed. 
 
 =head1 INCOMPATIBILITIES
 
@@ -429,8 +477,9 @@ B<REST::Client>, B<URI::Escape>
 B<http://developer.rottentomatoes.com/docs>
 
 You may notice differences in the required parameters of this script and the
-documentation. Take for instance the C<< movies_search >>. In order to search
-for a movie you must provide a query parameter.
+documentation. The differences are typically stop gaps to prevent the API from
+empty results. A good example is the movie_search method. Without a text ( or a
+url encoded ) search term you will not return any results.
 
 =head1 SUPPORT
 

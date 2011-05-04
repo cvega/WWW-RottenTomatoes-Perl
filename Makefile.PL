@@ -23,7 +23,7 @@ my %WriteMakefileArgs = (
     'REST::Client' => '171',
     'URI::Escape' => '3.30'
   },
-  'VERSION' => '0.01',
+  'VERSION' => '0.02',
   'test' => {
     'TESTS' => 't/*.t'
   }

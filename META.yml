@@ -15,4 +15,4 @@ name: WWW-RottenTomatoes
 requires:
   REST::Client: 171
   URI::Escape: 3.30
-version: 0.01
+version: 0.02
