@@ -5,7 +5,7 @@ use Carp qw{croak};
 	
 use base qw{REST::Client};
 
-our $VERSION = 0.02;
+our $VERSION = 0.03;
 
 sub new {
     my ( $class, %args ) = @_;
@@ -177,6 +177,22 @@ sub movie_reviews {
     return $self->responseContent;
 }
 
+sub movie_similar {
+    my ( $self, %args ) = @_;
+
+    if ( !$args{movie_id} ) {
+	 croak 'movie_similar method requires a "movie_id" parameter';
+    }
+
+    if ( $args{limit} ) {
+         $self->{params} .= '&limit=' . $args{limit};
+    }
+
+    $self->GET( "/movies/$args{movie_id}/similar" . $self->{params} );
+
+    return $self->responseContent;
+}
+
 sub in_theatre_movies {
     my ( $self, %args ) = @_;
 
@@ -219,7 +235,7 @@ WWW::RottenTomatoes - A Perl interface to the Rotten Tomatoes API
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =head1 SYNPOSIS
 
@@ -372,7 +388,9 @@ movies.
 
      $obj->movie_info( movie_id => 770672122 ); 
 
-* B< movie_id > S< integer, required: false, default: 16 >
+* B< movie_id > S< integer, required: true >
+
+The unique id (value) for a movie
 
 =head2 $obj->movie_cast(...)
 
@@ -380,7 +398,9 @@ Pulls the complete movie cast for a movie
 
      $obj->movie_cast( movie_id => 770672122 );
 
-* B< movie_id > S< integer, required: false, default: 16 >
+* B< movie_id > S< integer, required: true >
+
+The unique id (value) for a movie
 
 =head2 $obj->movie_reviews(...)
 
@@ -394,6 +414,10 @@ specified page limit
         page        => 5,
         country     => 'us'
     );
+
+* B< movie_id > S< integer, required: true >
+
+The unique id (value) for a movie
 
 * B< review_type > S< string, required: false, default: top_critic >
 
@@ -413,6 +437,19 @@ The selected page of movie reviews
 * B< country > S< string, required: false, default: "us" > 
 
 provides localized data for selected country (ISO 3166-1 alpha-2)
+
+=head2 $obj->movie_similar(...)
+
+Shows similar movies for a movies
+
+    $obj->movies_similar(
+        movie_id => 770672122,
+	limit    => 3
+    );
+
+* B< movie_id > S< integer, required: true >
+
+The unique id (value) for a movie
 
 =head2 $obj->in_theatre_movies(...)
 
