@@ -2,11 +2,7 @@
 use strict;
 use warnings;
 
-
-
 use ExtUtils::MakeMaker 6.31;
-
-
 
 my %WriteMakefileArgs = (
   'ABSTRACT' => 'A Perl interface to the Rotten Tomatoes API',
@@ -20,7 +16,7 @@ my %WriteMakefileArgs = (
   'LICENSE' => 'perl',
   'NAME' => 'WWW::RottenTomatoes',
   'PREREQ_PM' => {
-    'REST::Client' => '171',
+    'LWP::UserAgent' => '6.00',
     'URI::Escape' => '3.30'
   },
   'VERSION' => '0.02',
@@ -28,7 +24,6 @@ my %WriteMakefileArgs = (
     'TESTS' => 't/*.t'
   }
 );
-
 
 unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
   my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};

@@ -7,6 +7,7 @@ Makefile.PL
 README
 dist.ini
 lib/WWW/RottenTomatoes.pm
+lib/WWW/RottenTomatoes/Constants.pm
 t/00.load.t
 t/01.pod.t
 t/02.pod-coverage.t
