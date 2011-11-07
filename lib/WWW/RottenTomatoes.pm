@@ -2,7 +2,6 @@ package WWW::RottenTomatoes;
 
 use URI::Escape;
 use Carp qw{croak};
-
 use base qw{LWP::UserAgent};
 
 our $VERSION = "1.004"; $VERSION = eval $VERSION;
