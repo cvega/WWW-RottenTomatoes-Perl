@@ -1,8 +1,8 @@
 package WWW::RottenTomatoes::Constants;
 
 # method and param validation : 1 = required, 0 = optional
-sub params {
-    %hash = (
+sub params {    
+    return %instructions = (
         box_office_movies     => { country => 0, limit => 0 },
         in_theatre_movies     => { country => 0, page  => 0, page_limit => 0 },
         opening_movies        => { country => 0, limit => 0 },
@@ -11,25 +11,17 @@ sub params {
         current_dvd_releases  => { country => 0, page  => 0, page_limit => 0 },
         new_dvd_releases      => { country => 0, page  => 0, page_limit => 0 },
         upcoming_dvd_releases => { country => 0, page  => 0, page_limit => 0 },
-        movies_info    => { id => 1 },
-        movies_cast    => { id => 1 },
-        movies_clips   => { id => 1 },
-        movies_reviews => {
-            id          => 1,
-            review_type => 1,
-            country     => 0,
-            page        => 0,
-            page_limit  => 0
-        },
-        movies_similar => { id => 1, limit => 0 },
-        movies_alias   => { id => 1, type  => 1 },
-        movies_search  => { q  => 1, page  => 0, page_limit => 0 },
-        lists_directory       => {},
-        movie_lists_directory => {},
-        dvd_lists_directory   => {},
+        movies_info           => { id => 1 },
+        movies_cast           => { id => 1 },
+        movies_clips          => { id => 1 },
+        movies_reviews        => { id => 1, review_type => 1, country => 0, page => 0, page_limit  => 0 },
+        movies_similar        => { id => 1, limit => 0 },
+        movies_alias          => { id => 1, type  => 1 },
+        movies_search         => { q  => 1, page  => 0, page_limit => 0 },
+        lists_directory       => { },
+        movie_lists_directory => { },
+        dvd_lists_directory   => { },
     );
-
-    return %hash;
 }
 
 1;
@@ -47,11 +39,11 @@ Version 1.04
 =head1 SYNPOSIS
 
     use WWW::RottenTomatoes::Constants;
-    my %params = WWW::RottenTomatoes::Constants->params();
+    my %params = WWW::RottenTomatoes::Constants->params;
 
 =head1 DESCRIPTION
 
-This modules serves two purposes. The first purpose enables us the validate the
+This modules serves two purposes. The first purpose enables one to validate the
 constructor parameters being passed to our methods exist, are properly named,
 and defined properly if required. The second reason is because this module
 enables me to describe the RESTful methods which will make updates incredibly
@@ -102,7 +94,7 @@ its interface will go through at the least one deprecation cycle.
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright (c) 2011 Casey W. Vega.
+Copyright (c) 2011-2012 Casey W. Vega.
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
