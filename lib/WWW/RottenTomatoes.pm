@@ -3,6 +3,7 @@ package WWW::RottenTomatoes;
 use URI::Escape;
 use Carp qw{croak};
 use base qw{LWP::UserAgent};
+use JSON;
 
 our $VERSION = "1.004"; $VERSION = eval $VERSION;
 
@@ -110,7 +111,7 @@ sub AUTOLOAD {
     warn "GETTING $url";
     my $response = $self->get($url);
     if ( $response->is_success ) {
-        return $response->decoded_content;
+        return eval { decode_json $response->decoded_content };
     }
     else {
         croak "error: $response->status_line";
