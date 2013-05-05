@@ -58,11 +58,11 @@ sub AUTOLOAD {
     # begin to build url based on end points (movie, DVD, info, lists)
     my $url;
     if ( $name =~ m/^.*_movies$/ ) {
-        $name = s/_movies//;
+        $name =~ s/_movies//;
         $url  = "/lists/movies/$name.json";
     }
     elsif ( $name =~ m/^.*_dvd_.*$/ ) {
-        $name = s/_dvd_//;
+        $name =~ s/_dvd_//;
         if ( $name =~ m/^upcoming/ ) {
             $url = '/lists/DVDs/upcoming.json';
         }
@@ -71,14 +71,15 @@ sub AUTOLOAD {
         }
     }
     elsif ( $name =~ m/^movies_.*$/ ) {
-        $name = s/^movies_//;
-        if ( $name = 'search' ) {
+        $name =~ s/^movies_//;
+       warn "NAME: $name";
+        if ( $name eq 'search' ) {
             $url = '/movies.json';
         }
-        elsif ( $name = 'alias' ) {
+        elsif ( $name eq 'alias' ) {
             $url = '/movie_alias.json';
         }
-        elsif ( $name = 'info' ) {
+        elsif ( $name eq 'info' ) {
             $url = "/movies/$opts{movie_id}.json";
         }
         else {
@@ -87,7 +88,7 @@ sub AUTOLOAD {
     }
     else {
         $name = s/_.*//;
-        if ( $name = 'lists' ) {
+        if ( $name eq 'lists' ) {
             $url = '/lists.json';
         }
         else {
@@ -98,7 +99,7 @@ sub AUTOLOAD {
     # continue to build and add key/values pairs to url
     $url = $self{host} . $url . "?apikey=$self{token}";
     while ( my ( $key, $value ) = each(%opts) ) {
-        if ( $key = 'q' ) {
+        if ( $key eq 'q' ) {
             $value = uri_escape($value);
         }
 
@@ -106,6 +107,7 @@ sub AUTOLOAD {
     }
 
     # url complete, make http request. report accordingly
+    warn "GETTING $url";
     my $response = $self->get($url);
     if ( $response->is_success ) {
         return $response->decoded_content;
@@ -440,7 +442,7 @@ lookup at this time
 
     $obj->movies_alias  (
         id   => 9818,
-        type => 'imbd',
+        type => 'imdb',
     );
 
 * B< id > S< integer, required: true>
