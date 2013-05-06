@@ -3,6 +3,7 @@ package WWW::RottenTomatoes;
 use URI::Escape;
 use Carp qw{croak};
 use base qw{LWP::UserAgent};
+use JSON;
 
 our $VERSION = "1.004"; $VERSION = eval $VERSION;
 
@@ -58,11 +59,11 @@ sub AUTOLOAD {
     # begin to build url based on end points (movie, DVD, info, lists)
     my $url;
     if ( $name =~ m/^.*_movies$/ ) {
-        $name = s/_movies//;
+        $name =~ s/_movies//;
         $url  = "/lists/movies/$name.json";
     }
     elsif ( $name =~ m/^.*_dvd_.*$/ ) {
-        $name = s/_dvd_//;
+        $name =~ s/_dvd_//;
         if ( $name =~ m/^upcoming/ ) {
             $url = '/lists/DVDs/upcoming.json';
         }
@@ -71,14 +72,14 @@ sub AUTOLOAD {
         }
     }
     elsif ( $name =~ m/^movies_.*$/ ) {
-        $name = s/^movies_//;
-        if ( $name = 'search' ) {
+        $name =~ s/^movies_//;
+        if ( $name eq 'search' ) {
             $url = '/movies.json';
         }
-        elsif ( $name = 'alias' ) {
+        elsif ( $name eq 'alias' ) {
             $url = '/movie_alias.json';
         }
-        elsif ( $name = 'info' ) {
+        elsif ( $name eq 'info' ) {
             $url = "/movies/$opts{movie_id}.json";
         }
         else {
@@ -87,7 +88,7 @@ sub AUTOLOAD {
     }
     else {
         $name = s/_.*//;
-        if ( $name = 'lists' ) {
+        if ( $name eq 'lists' ) {
             $url = '/lists.json';
         }
         else {
@@ -98,7 +99,7 @@ sub AUTOLOAD {
     # continue to build and add key/values pairs to url
     $url = $self{host} . $url . "?apikey=$self{token}";
     while ( my ( $key, $value ) = each(%opts) ) {
-        if ( $key = 'q' ) {
+        if ( $key eq 'q' ) {
             $value = uri_escape($value);
         }
 
@@ -108,7 +109,7 @@ sub AUTOLOAD {
     # url complete, make http request. report accordingly
     my $response = $self->get($url);
     if ( $response->is_success ) {
-        return $response->decoded_content;
+        return eval { decode_json $response->decoded_content };
     }
     else {
         croak "error: $response->status_line";
@@ -440,7 +441,7 @@ lookup at this time
 
     $obj->movies_alias  (
         id   => 9818,
-        type => 'imbd',
+        type => 'imdb',
     );
 
 * B< id > S< integer, required: true>
