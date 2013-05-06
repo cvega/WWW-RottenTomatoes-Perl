@@ -73,7 +73,6 @@ sub AUTOLOAD {
     }
     elsif ( $name =~ m/^movies_.*$/ ) {
         $name =~ s/^movies_//;
-       warn "NAME: $name";
         if ( $name eq 'search' ) {
             $url = '/movies.json';
         }
@@ -108,7 +107,6 @@ sub AUTOLOAD {
     }
 
     # url complete, make http request. report accordingly
-    warn "GETTING $url";
     my $response = $self->get($url);
     if ( $response->is_success ) {
         return eval { decode_json $response->decoded_content };
