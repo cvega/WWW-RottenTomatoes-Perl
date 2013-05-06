@@ -522,7 +522,7 @@ against the API. The scope of this limitation exists outside of the code base.
 
 =head1 DEPENDENCIES
 
-B<Carp>, B<LWP::UserAgent>, B<URI::Escape>
+B<Carp>, B<JSON>, B<LWP::UserAgent>, B<URI::Escape>
 
 =head1 SEE ALSO
 
